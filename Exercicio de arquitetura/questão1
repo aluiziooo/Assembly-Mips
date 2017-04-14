@@ -1,0 +1,43 @@
+.data 
+str1: .asciiz "Digite um numero: "
+str2: .asciiz "Digite outro numero: "
+str3: .asciiz "Os numeros digitados são iguais"
+str4: .asciiz "Os numeros digitados são diferentes"
+.text
+#####1. Fazer um programa que receba dois valores digitados pelo usuário e exiba uma mensagem se eles são iguais ou diferentes.
+li $v0, 4
+la $a0, str1
+syscall 
+
+li $v0, 5
+syscall
+
+move $a1, $v0
+
+li $v0, 4
+la $a0, str2
+syscall 
+
+li $v0, 5
+syscall 
+
+move $a2, $v0
+
+beq $a1,$a2, igual
+bne $a1,$a2,not_igual
+
+igual:
+li $v0, 4
+la $a0, str3
+syscall 
+
+li $v0, 10
+syscall 
+
+not_igual:
+li $v0, 4
+la $a0, str4
+syscall 
+
+li $v0, 10
+syscall

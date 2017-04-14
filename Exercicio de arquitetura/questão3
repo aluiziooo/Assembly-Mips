@@ -1,0 +1,30 @@
+.data
+str1: .asciiz "  "
+str2: .asciiz " Numeros decrescentes"
+.text
+#3. Fazer um programa que decremente todos os números de 10 a 1, através de um looping, exiba todos os números.
+
+li $a0, 10
+main:
+li $v0,1
+syscall 
+
+move $a1,$a0
+
+li $v0, 4
+la $a0, str1
+syscall 
+
+move $a0,$a1
+
+
+loop:
+sub $a0,$a0,1
+bge $a0,1,main
+ble $a0,0,saida
+saida:
+li $v0, 4
+la $a0, str2
+syscall 
+li $v0, 10
+syscall 

@@ -1,0 +1,107 @@
+#foi uma dureza fazer isso, tive que comentar pra não me perder
+.data 
+newArray:	.word 0:19	# array de words que armazenará valores coletados
+size:		.word 19	# tamanho do array
+str1: .asciiz "\n1. Inserir Valores Inteiros\n"
+str2: .asciiz "2. Exibir Valores\n"
+str3: .asciiz "3. Sair\n"
+str4: .asciiz "Digite numero, -1 para sair"
+.text
+#6. Fazer um programa que exiba um menu com as seguintes opções: 
+
+#	1. Inserir Valores Inteiros 	-> Essa opção insere valores inteiros na memória
+#	2. Exibir Valores 		-> Essa opção exibe os valores armzenados na memória 
+#	3. Sair				-> Finaliza o programa. O programa só deverá ser finalizado se essa opção for escolhida
+#
+#Caso não existam valores digitados e alguém tente exibi-los, deverá ser mostrada uma mensagem: "Não existem itens a exibir"
+main:
+addi $v0,$zero,4
+la $a0, str1
+syscall 
+
+addi $v0,$zero,4
+la $a0, str2
+syscall 
+
+addi $v0,$zero,4
+la $a0, str3
+syscall 
+
+addi $v0,$zero,5
+syscall 
+
+beq $v0,1,opcao1
+beq $v0,2,opcao2
+beq $v0,3,opcao3
+opcao1:
+li $v0,4
+la $a0,str4
+syscall 
+#la	$s0, newArray	# carregue endereço do array
+lui	$at, 0x1001 
+add	$s0, $zero, $at
+
+#la	$s5, size	# carregue endereço do tamanho variável
+lui	$at, 0x1001
+addi 	$s5, $at, 0x4c
+
+
+lw	$s5, 0($s5)	# carregue tamanho do array
+
+add 	$s1, $zero, $s5
+
+#loop que insere valores na memória
+loopAdd:
+	addi	$v0, $zero, 5
+	syscall
+	add	$s2, $zero, $v0
+	blt $s2,0,main
+
+	sw	$s2, 0($s0)
+	addi	$s0, $s0, 4
+
+	addi	$s1, $s1, -1
+	bgtz	$s1, loopAdd	# Se maior que zero vá para repetição
+j main
+
+
+opcao2:
+
+beq $s1,0,main
+.data
+head:		.asciiz  	"\nSequência digitada:\n"
+space: .asciiz " "
+
+.text
+	lui	$at, 0x1001#carrego a posição inicial do meu array para o at
+	add	$a3, $zero, $at
+
+	sub $s1,$s5,$s1
+
+	add	$a1, $zero, $s1
+		
+	add 	$t0, $zero, $a3#transfiro a posição para o t0
+	add	$t1, $zero, $a1#passo a quantidade de words no array para ajudar no loop
+	
+	la	$a0, head
+	li	$v0, 4
+	syscall
+loop:
+	lw $s6, ($t0)#leio o que tá na posição atual do array
+	add $a0,$zero,$s6#carrego no a0 o conteudo lido para o s6
+	addi $v0,$zero,1#printo o numero
+	syscall 
+	
+	la $a0,space#separo os numero
+	addi $v0,$zero,4
+	syscall 
+	
+	
+	add $t0,$t0,4#adiciono 4 no numero da posição atual do vetor, para que ele passe para a proxima posição, já que um word possue 4 bytes
+	sub $t1,$t1,1#subtraio 1 do contador 
+	
+	beq $t1,0,main#se o contador for igual a zero quer dizer que acabou espaço no meu array ele me joga para o main
+	j loop#se não eu vou para o loop mais uma vez
+opcao3:
+	li $v0,10
+	syscall 

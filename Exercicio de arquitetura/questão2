@@ -1,0 +1,47 @@
+.data 
+str1: .asciiz "Digite um numero: "
+str2: .asciiz "Digite outro numero: "
+str3: .asciiz "A soma é maior que 100"
+str4: .asciiz "A soma é menor que 100"
+.text
+#2. Fazer um programa que receba dois valores digitados pelo usuário, em seguida os valores devem ser somados. Se a soma for maior que 100 exiba uma mensagem; se menor exiba outra mensagem.
+
+li $v0, 4
+la $a0, str1
+syscall 
+
+li $v0, 5
+syscall
+
+move $a1, $v0
+
+li $v0, 4
+la $a0, str2
+syscall 
+
+li $v0, 5
+syscall 
+
+move $a2, $v0
+
+add $a1,$a1,$a2
+
+bgt $a1,100,maior
+blt $a1,100,menor
+
+maior:
+li $v0, 4
+la $a0, str3
+syscall 
+
+li $v0, 10
+syscall 
+
+
+menor:
+li $v0, 4
+la $a0, str4
+syscall 
+
+li $v0, 10
+syscall 

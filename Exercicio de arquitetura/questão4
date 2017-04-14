@@ -1,0 +1,38 @@
+.data
+str1: .asciiz "Digite um numero: "
+str2: .asciiz "  "
+.text
+#4. Fazer um programa que receba um valor digitado pelo usuário. O programa deverá exibir todos os números de 1 até o número digitado.
+
+li $v0, 4
+la $a0, str1
+syscall 
+
+li $v0,5
+syscall 
+
+move $a2,$v0
+
+li $a0, 0
+
+
+loop:
+beq $a0,$a2, exit
+bne $a0,$a2,adiciona
+
+adiciona:
+add $a0,$a0,1
+li $v0,1
+syscall 
+
+move $a3, $a0
+li $v0, 4
+la $a0, str2
+syscall 
+
+move $a0, $a3
+
+j loop
+exit:
+li $v0,10
+syscall 
